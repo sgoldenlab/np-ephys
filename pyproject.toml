@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "np-ephys"
+version = "0.1.0"
+description = "Collection of scripts used in the Golden Lab to process electrophysiological recordings, from spike sorting to postprocessing and unit curation."
+authors = [{ name = "Kevin N. Schneider", email = "kevsch88@gmail.com" }]
+requires-python = ">=3.10,<3.13"
+readme = "README.md"
+dependencies = [
+    "spikeinterface[full, widgets]>=0.102.3",
+    "mtscomp>=1.0.2,<2",
+    "ipykernel>=6.28.0,<7",
+    "sortingview>=0.13.1,<0.14",
+    "ipywidgets>=8.1.2,<9",
+    "matplotlib>=3.9.2,<4",
+    "jupyter>=1.1.1,<2",
+    "pyarrow>=21.0.0,<22",
+    "pydantic-settings>=2.10.1",
+    "python-dotenv>=1.1.1",
+]
+
+[dependency-groups]
+sorting = [
+    "docker",
+    "tqdm>=4.66.1,<5",
+    "kilosort[gui]==v4.0.22",
+    "pytorch-triton>=3.4.0,<4",
+    "torch>=2.9.0.dev20250711,<3",
+    "torchvision>=0.24.0.dev20250711,<0.25",
+    "torchaudio>=2.8.0.dev20250711,<3",
+]
+
+[tool.uv]
+default-groups = ["sorting"]
+
+[[tool.uv.index]]
+name = "pytorch-nightly-cu129"
+url = "https://download.pytorch.org/whl/nightly/cu129"
+explicit = true
+
+[tool.uv.sources]
+pytorch-triton = { index = "pytorch-nightly-cu129" }
+torch = { index = "pytorch-nightly-cu129" }
+torchvision = { index = "pytorch-nightly-cu129" }
+torchaudio = { index = "pytorch-nightly-cu129" }
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[project.scripts]
+set_up_folders = "set_up_folders:main"

@@ -1,0 +1,14 @@
+# Project/Run configuration for the pipeline
+# Update parameters for project and subject/recordings
+
+[experiment]
+dir = "4_Behavioral_Sensitization"
+
+[experiment.recordings]
+# if multiple recordings to concatenate, set concatenate = true
+BS03_R1 = { concatenate = false }
+BS03_R2 = { concatenate = false }
+BS04_R1 = { concatenate = false }
+BS04_R2 = { concatenate = false }
+BS04_R3 = { concatenate = false }
+BS05_R1 = { concatenate = false }
