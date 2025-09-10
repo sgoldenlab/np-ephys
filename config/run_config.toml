@@ -2,13 +2,12 @@
 # Update parameters for project and subject/recordings
 
 [experiment]
-dir = "4_Behavioral_Sensitization"
+dir = ""
 
 [experiment.recordings]
 # if multiple recordings to concatenate, set concatenate = true
-BS03_R1 = { concatenate = false }
-BS03_R2 = { concatenate = false }
-BS04_R1 = { concatenate = false }
-BS04_R2 = { concatenate = false }
-BS04_R3 = { concatenate = false }
-BS05_R1 = { concatenate = false }
+# for multiple shank probes:
+#    set multiple_shanks = true or list of booleans for each probe
+#    if multiple probes, set multiple_shanks = list of booleans
+# Example:
+ANIMALID_R1 = { concatenate = false, multiple_shanks = true }

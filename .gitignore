@@ -117,3 +117,6 @@ database.db
 *.sqlite3
 *.db
 *.db-journal
+
+# local run config files
+run_config_*.toml
