@@ -120,3 +120,6 @@ database.db
 
 # local run config files
 run_config_*.toml
+
+# scratch folder
+scratch/
