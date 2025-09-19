@@ -4,8 +4,15 @@ from pathlib import Path
 from spikeinterface.core import BaseRecording, ChunkRecordingExecutor
 
 # %% Helpers
-def load_alignment_data(filename: Path, ):
-    "load alignment table with unit->channelid->brain region info"
+def load_alignment_data(filename: Path):
+    """
+    Load alignment table with unit->channelid->brain region info.
+
+    Parameters
+    ----------
+    filename : Path
+        Path to the alignment data file to load.
+    """
     pass
 
 def get_rec_spikes():
