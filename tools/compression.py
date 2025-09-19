@@ -84,7 +84,7 @@ def compress_recordings(recording_pairs, batch_folder, target_folder: Path, proj
 
         if project_base_path is not None:
             target_folder = (project_base_path / animal / recording_name / target_folder).resolve()
-        assert target_folder.exists(), f"Target folder does not exist: {target_folder}"
+        target_folder.mkdir(parents=True, exist_ok=True)
         
         for rec_folder in rec_folders:
             compress_recording(rec_name, rec_folder, target_folder, job_kwargs)
