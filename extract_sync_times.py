@@ -69,17 +69,17 @@ def _get_sync_times_chunk(
     if threshold is not None:
         # Find where the signal crosses the threshold from below
         crossings = np.where((traces[:-1] < threshold) & (traces[1:] >= threshold))[0]
-        local_peaks = crossings
+        event_indices = crossings
     else:
         # Alternative: Using np.diff and find_peaks
         diffs = np.diff(traces.squeeze())
         # Define findpeaks_kwargs inside or pass them as an argument
         findpeaks_kwargs = dict(height=0.5, prominence=0.5) # Use a sensible height for diffs
-        local_peaks, _ = find_peaks(diffs, **findpeaks_kwargs)
+        event_indices, _ = find_peaks(diffs, **findpeaks_kwargs)
 
     # Convert local chunk indices to global recording indices
     # the offset is the start of the *current* chunk
-    ping_samples = local_peaks + start_frame
+    ping_samples = event_indices + start_frame
     ping_times = times[ping_samples]
     return ping_samples, ping_times
 
