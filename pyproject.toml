@@ -20,6 +20,7 @@ dependencies = [
     "pyarrow>=21.0.0,<22",
     "pydantic-settings>=2.10.1",
     "python-dotenv>=1.1.1",
+    "polars>=1.33.0",
 ]
 
 [dependency-groups]
@@ -48,7 +49,7 @@ torchvision = { index = "pytorch-nightly-cu129" }
 torchaudio = { index = "pytorch-nightly-cu129" }
 
 [tool.setuptools]
-package-dir = { "" = "src" }
+package-dir = { "" = "tools" }
 
 [project.scripts]
 set_up_folders = "set_up_folders:main"

@@ -17,7 +17,7 @@ job_kwargs=dict(
 print("\nParallel Job parameters:")
 pprint(job_kwargs, indent=4)
 
-def compress_recording(recording_name: str, rec_folder: Path | list | str, target_folder, job_kwargs=job_kwargs):
+def compress_recording(recording_name: str, rec_folder: Path | list | str, target_folder: Path, job_kwargs=job_kwargs):
     if isinstance(rec_folder, str):
         rec_folder = Path(rec_folder)
     elif isinstance(rec_folder, list):
@@ -58,7 +58,7 @@ def compress_recording(recording_name: str, rec_folder: Path | list | str, targe
         print(f'...copied {meta_file.name} to {target_meta.name}.')
         print(f'---finished processing {recording_name}---\n')
 
-def compress_recordings(recording_pairs, batch_folder, target_folder, job_kwargs=job_kwargs):
+def compress_recordings(recording_pairs, batch_folder, target_folder: Path, project_base_path: Path | None=None, job_kwargs=job_kwargs):
     for session, properties in recording_pairs.items():
         animal = session.split('_')[0]
         recording_name = session
@@ -82,6 +82,10 @@ def compress_recordings(recording_pairs, batch_folder, target_folder, job_kwargs
             rec_folders = [rec_folder]
             rec_name = rec_folder.name
 
+        if project_base_path is not None:
+            target_folder = (project_base_path / animal / recording_name / target_folder).resolve()
+        target_folder.mkdir(parents=True, exist_ok=True)
+        
         for rec_folder in rec_folders:
             compress_recording(rec_name, rec_folder, target_folder, job_kwargs)
 

@@ -2,6 +2,14 @@
 
 Collection of scripts used in the Golden Lab to process electrophysiological recordings, from spike sorting to postprocessing and unit curation.
 
+## Pipeline Features 🚧
+- [x] Experiment folder setup
+- [x] Recording binary compression (via [MTSComp](https://github.com/int-brain-lab/mtscomp))
+- [x] Spike sorting with Kilosort4 (via [SpikeInterface](https://github.com/SpikeInterface/spikeinterface))
+- [ ] Postprocessing + alignment
+- [ ] Spike times extraction
+- [ ] Logging
+- [ ] Containerization
 
 ## Getting Started
 
