@@ -1,12 +1,36 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from pprint import pprint
 from pathlib import Path
 from tools.settings import settings
 from scipy.signal import find_peaks
 from tools.spikesorting import load_recording
+from spikeinterface.widgets import plot_traces
+from spikeinterface.extractors import read_cbin_ibl
 from spikeinterface.core import BaseRecording, ChunkRecordingExecutor
 
 # %% functions
+def plot_sync_snippet(raw_file_path, time_range=(0, 10)):
+    """
+    Reads a compressed IBL binary file and plots a snippet of the sync channel trace.
+    Example usage:
+    `plot_sync_snippet(<raw_file>.cbin)`
+
+    Parameters
+    ----------
+    raw_file_path : str or Path
+        Path to the .cbin file.
+    time_range : tuple, optional
+        The time range to plot in seconds, by default (0, 10).
+    """
+    rec = read_cbin_ibl(cbin_file_path=raw_file_path, load_sync_channel=True)
+    # The last channel is typically sync channel
+    sync_channel_id = rec.get_channel_ids()[-1]
+    plot_traces(rec, channel_ids=[sync_channel_id],
+                   time_range=time_range, return_scaled=False)
+    plt.title(f'Sync channel snippet for {raw_file_path.name}')
+    plt.show()
+
 def get_sync_timestamps(
         recording: BaseRecording,
         threshold=None,
@@ -64,7 +88,7 @@ def _get_sync_times_chunk(
     times = worker_ctx["times"]
     threshold = worker_ctx["threshold"]
 
-    traces = recording.get_traces(start_frame=start_frame, end_frame=end_frame, segment_index=segment_index, return_scaled=True)
+    traces = recording.get_traces(start_frame=start_frame, end_frame=end_frame, segment_index=segment_index, return_scaled=False)
     # --- Detection Logic ---
     if threshold is not None:
         # Find where the signal crosses the threshold from below
@@ -88,6 +112,7 @@ def get_recording_sync(
         rec_folder: Path,
         probe_num: int,
         overwrite: bool = False,
+        save: bool = True,
         threshold=None,
         verbose: bool = False,
         sync_job_kwargs: dict = dict(n_jobs=8, chunk_duration='10s', progress_bar=True)
@@ -118,14 +143,15 @@ def get_recording_sync(
                 return None, None
             
             # save to simple npy
-            np.save(data_output / f'ping_samples_probe{probe_num}.npy', ping_samples)
-            np.save(data_output / f'ping_times_probe{probe_num}.npy', ping_times)
+            if save:
+                np.save(data_output / f'ping_samples_probe{probe_num}.npy', ping_samples)
+                np.save(data_output / f'ping_times_probe{probe_num}.npy', ping_times)
             print(f'Found {len(ping_samples)} sync timestamps for probe {probe_num} in {raw_file.stem}')
             print(f'Saved sync timestamps to {data_output}')
         return ping_samples, ping_times
 
 # %% main processing loop
-def get_all_sync():
+def get_all_sync(save=True, overwrite=False):
     for session, properties in recording_sessions.items():
         animal = session.split('_')[0]
         recording_name = session
@@ -159,6 +185,7 @@ def get_all_sync():
                 rec_folder,
                 probe_num,
                 overwrite=overwrite,
+                save=save,
                 threshold=None,
                 verbose=True,
                 sync_job_kwargs=dict(n_jobs=8, chunk_duration='10s', progress_bar=True)
