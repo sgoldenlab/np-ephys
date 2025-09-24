@@ -20,6 +20,7 @@ dependencies = [
     "pyarrow>=21.0.0,<22",
     "pydantic-settings>=2.10.1",
     "python-dotenv>=1.1.1",
+    "polars>=1.33.0",
 ]
 
 [dependency-groups]
